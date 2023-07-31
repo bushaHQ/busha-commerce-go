@@ -33,11 +33,11 @@ func main() {
         return
     }
     
-    //Create Checkout with fixed price
-    chargeCreated, err := commerceClient.Checkout.Create(&commerce.CheckoutRequest{
+    //Create Payment link with fixed price
+    chargeCreated, err := commerceClient.PaymentLink.Create(&commerce.CheckoutRequest{
         Name:          "iPhone 14 Pro",
         Description:   "This is a test checkout to sell my iPhone 14",
-        CheckoutType:  commerce.FixedPrice,
+        PaymentLinkType:  commerce.FixedPrice,
         RequestedInfo: []string{"name", "email", "phone"},
         LocalAmount:   800,
         LocalCurrency: "NGN",
