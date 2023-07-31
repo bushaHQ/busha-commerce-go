@@ -8,72 +8,72 @@ import (
 	"testing"
 )
 
-func TestCheckoutService_Create(t *testing.T) {
+func TestPaymentLinkService_Create(t *testing.T) {
 	type args struct {
-		req *CheckoutRequest
+		req *PaymentLinkRequest
 	}
 	tests := []struct {
 		name    string
-		s       CheckoutService
+		s       PaymentLinkService
 		args    args
-		want    *CheckoutResponse
+		want    *PaymentLinkResponse
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
-			name: "Create successful checkout",
-			s: CheckoutService{
+			name: "Create successful payment link",
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
-				req: &CheckoutRequest{
-					Name:          "Astro checkout",
-					Description:   "Testing the checkout for my iphone 14",
-					CheckoutType:  FixedPrice,
-					RequestedInfo: []string{"name", "email", "phone"},
-					LocalAmount:   5000,
-					LocalCurrency: "NGN",
+				req: &PaymentLinkRequest{
+					Name:            "Astro payment link",
+					Description:     "Testing the payment link for my iphone 14",
+					PaymentLinkType: FixedPrice,
+					RequestedInfo:   []string{"name", "email", "phone"},
+					LocalAmount:     5000,
+					LocalCurrency:   "NGN",
 				},
 			},
-			want: &CheckoutResponse{
-				Response: Response{Status: Success, Message: "Checkout created successfully"},
-				Data:     Checkout{},
+			want: &PaymentLinkResponse{
+				Response: Response{Status: Success, Message: "PaymentLink created successfully"},
+				Data:     PaymentLink{},
 			},
 			wantErr: assert.NoError,
 		},
 		{
-			name: "Create failed checkout (amount must not be attached for donations)",
-			s: CheckoutService{
+			name: "Create failed payment link (amount must not be attached for donations)",
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
-				req: &CheckoutRequest{
-					Name:          "Astro NGO",
-					Description:   "Raising money to buy a dog",
-					CheckoutType:  Donation,
-					RequestedInfo: []string{"name", "email", "phone"},
-					LocalAmount:   5000,
-					LocalCurrency: "NGN",
+				req: &PaymentLinkRequest{
+					Name:            "Astro NGO",
+					Description:     "Raising money to buy a dog",
+					PaymentLinkType: Donation,
+					RequestedInfo:   []string{"name", "email", "phone"},
+					LocalAmount:     5000,
+					LocalCurrency:   "NGN",
 				},
 			},
-			want:    &CheckoutResponse{},
+			want:    &PaymentLinkResponse{},
 			wantErr: assert.Error,
 		},
 		{
-			name: "Create failed checkout (invalid currency)",
-			s: CheckoutService{
+			name: "Create failed payment link (invalid currency)",
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
-				req: &CheckoutRequest{
-					Name:          "Astro NGO",
-					Description:   "Raising money to buy a dog",
-					CheckoutType:  FixedPrice,
-					RequestedInfo: []string{"name", "email", "phone"},
-					LocalAmount:   5000,
-					LocalCurrency: "ASTROPCOIN",
+				req: &PaymentLinkRequest{
+					Name:            "Astro NGO",
+					Description:     "Raising money to buy a dog",
+					PaymentLinkType: FixedPrice,
+					RequestedInfo:   []string{"name", "email", "phone"},
+					LocalAmount:     5000,
+					LocalCurrency:   "ASTROPCOIN",
 				},
 			},
-			want:    &CheckoutResponse{},
+			want:    &PaymentLinkResponse{},
 			wantErr: assert.Error,
 		},
 	}
@@ -88,32 +88,32 @@ func TestCheckoutService_Create(t *testing.T) {
 	}
 }
 
-func TestCheckoutService_CreateCharge(t *testing.T) {
+func TestPaymentLinkService_CreateCharge(t *testing.T) {
 	type args struct {
 		id  string
 		req *ChargeRequest
 	}
 	tests := []struct {
 		name    string
-		s       CheckoutService
+		s       PaymentLinkService
 		args    args
 		want    *ChargeResponse
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
 			name: "Create charge successful",
-			s: CheckoutService{
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
 				id: func() string {
-					got, err := c.Checkout.Create(&CheckoutRequest{
-						Name:          "Astro checkout",
-						Description:   "Testing the checkout for my iphone 14",
-						CheckoutType:  FixedPrice,
-						RequestedInfo: []string{"name", "email", "phone"},
-						LocalAmount:   5000,
-						LocalCurrency: "NGN",
+					got, err := c.PaymentLink.Create(&PaymentLinkRequest{
+						Name:            "Astro payment link",
+						Description:     "Testing the payment link for my iphone 14",
+						PaymentLinkType: FixedPrice,
+						RequestedInfo:   []string{"name", "email", "phone"},
+						LocalAmount:     5000,
+						LocalCurrency:   "NGN",
 					})
 					if err != nil {
 						return ""
@@ -146,31 +146,31 @@ func TestCheckoutService_CreateCharge(t *testing.T) {
 	}
 }
 
-func TestCheckoutService_Delete(t *testing.T) {
+func TestPaymentLinkService_Delete(t *testing.T) {
 	type args struct {
 		id string
 	}
 	tests := []struct {
 		name    string
-		s       CheckoutService
+		s       PaymentLinkService
 		args    args
 		want    *Response
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
 			name: "Delete successful",
-			s: CheckoutService{
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
 				id: func() string {
-					got, err := c.Checkout.Create(&CheckoutRequest{
-						Name:          "Astro checkout",
-						Description:   "Testing the checkout for my iphone 14",
-						CheckoutType:  FixedPrice,
-						RequestedInfo: []string{"name", "email", "phone"},
-						LocalAmount:   5000,
-						LocalCurrency: "NGN",
+					got, err := c.PaymentLink.Create(&PaymentLinkRequest{
+						Name:            "Astro payment link",
+						Description:     "Testing the payment link for my iphone 14",
+						PaymentLinkType: FixedPrice,
+						RequestedInfo:   []string{"name", "email", "phone"},
+						LocalAmount:     5000,
+						LocalCurrency:   "NGN",
 					})
 					if err != nil {
 						return ""
@@ -178,7 +178,7 @@ func TestCheckoutService_Delete(t *testing.T) {
 					return got.Data.Id.String()
 				}(),
 			},
-			want:    &Response{Status: Success, Message: "Checkout deleted successfully"},
+			want:    &Response{Status: Success, Message: "Payment link deleted successfully"},
 			wantErr: assert.NoError,
 		},
 	}
@@ -193,31 +193,31 @@ func TestCheckoutService_Delete(t *testing.T) {
 	}
 }
 
-func TestCheckoutService_Get(t *testing.T) {
+func TestPaymentLinkService_Get(t *testing.T) {
 	type args struct {
 		id string
 	}
 	tests := []struct {
 		name    string
-		s       CheckoutService
+		s       PaymentLinkService
 		args    args
-		want    *CheckoutResponse
+		want    *PaymentLinkResponse
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
-			name: "Get successful checkout",
-			s: CheckoutService{
+			name: "Get successful payment link",
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
 				id: func() string {
-					got, err := c.Checkout.Create(&CheckoutRequest{
-						Name:          "Astro checkout",
-						Description:   "Testing the checkout for my iphone 14",
-						CheckoutType:  FixedPrice,
-						RequestedInfo: []string{"name", "email", "phone"},
-						LocalAmount:   5000,
-						LocalCurrency: "NGN",
+					got, err := c.PaymentLink.Create(&PaymentLinkRequest{
+						Name:            "Astro payment link",
+						Description:     "Testing the payment link for my iphone 14",
+						PaymentLinkType: FixedPrice,
+						RequestedInfo:   []string{"name", "email", "phone"},
+						LocalAmount:     5000,
+						LocalCurrency:   "NGN",
 					})
 					if err != nil {
 						return ""
@@ -225,21 +225,21 @@ func TestCheckoutService_Get(t *testing.T) {
 					return got.Data.Id.String()
 				}(),
 			},
-			want: &CheckoutResponse{
+			want: &PaymentLinkResponse{
 				Response: Response{Status: Success},
-				Data:     Checkout{},
+				Data:     PaymentLink{},
 			},
 			wantErr: assert.NoError,
 		},
 		{
-			name: "Get checkout that does not exist",
-			s: CheckoutService{
+			name: "Get payment link that does not exist",
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
 				id: "999",
 			},
-			want:    &CheckoutResponse{},
+			want:    &PaymentLinkResponse{},
 			wantErr: assert.Error,
 		},
 	}
@@ -254,20 +254,20 @@ func TestCheckoutService_Get(t *testing.T) {
 	}
 }
 
-func TestCheckoutService_List(t *testing.T) {
+func TestPaymentLinkService_List(t *testing.T) {
 	type args struct {
 		params ListParameters
 	}
 	tests := []struct {
 		name    string
-		s       CheckoutService
+		s       PaymentLinkService
 		args    args
-		want    *ListCheckoutResponse
+		want    *ListPaymentLinksResponse
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
-			name: "List checkout successful",
-			s: CheckoutService{
+			name: "List payment links successful",
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
@@ -275,11 +275,11 @@ func TestCheckoutService_List(t *testing.T) {
 					Limit: 10,
 				},
 			},
-			want: &ListCheckoutResponse{
+			want: &ListPaymentLinksResponse{
 				ResponseWithPagination{
 					Response:   Response{Status: Success},
 					Pagination: Paginator{}},
-				[]*Checkout{},
+				[]*PaymentLink{},
 			},
 			wantErr: assert.NoError,
 		},
@@ -295,31 +295,31 @@ func TestCheckoutService_List(t *testing.T) {
 	}
 }
 
-func TestCheckoutService_ToggleStatus(t *testing.T) {
+func TestPaymentLinkService_ToggleStatus(t *testing.T) {
 	type args struct {
 		id string
 	}
 	tests := []struct {
 		name    string
-		s       CheckoutService
+		s       PaymentLinkService
 		args    args
-		want    *CheckoutResponse
+		want    *PaymentLinkResponse
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
 			name: "Toggle status successful",
-			s: CheckoutService{
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
 				id: func() string {
-					got, err := c.Checkout.Create(&CheckoutRequest{
-						Name:          "Astro checkout",
-						Description:   "Testing the checkout for my iphone 14",
-						CheckoutType:  FixedPrice,
-						RequestedInfo: []string{"name", "email", "phone"},
-						LocalAmount:   5000,
-						LocalCurrency: "NGN",
+					got, err := c.PaymentLink.Create(&PaymentLinkRequest{
+						Name:            "Astro payment link",
+						Description:     "Testing the payment link for my iphone 14",
+						PaymentLinkType: FixedPrice,
+						RequestedInfo:   []string{"name", "email", "phone"},
+						LocalAmount:     5000,
+						LocalCurrency:   "NGN",
 					})
 					if err != nil {
 						return ""
@@ -327,9 +327,9 @@ func TestCheckoutService_ToggleStatus(t *testing.T) {
 					return got.Data.Id.String()
 				}(),
 			},
-			want: &CheckoutResponse{
+			want: &PaymentLinkResponse{
 				Response: Response{Status: Success},
-				Data:     Checkout{},
+				Data:     PaymentLink{},
 			},
 			wantErr: assert.NoError,
 		},
@@ -345,45 +345,45 @@ func TestCheckoutService_ToggleStatus(t *testing.T) {
 	}
 }
 
-func TestCheckoutService_Update(t *testing.T) {
+func TestPaymentLinkService_Update(t *testing.T) {
 	type args struct {
 		id  string
-		req *CheckoutRequest
+		req *PaymentLinkRequest
 	}
 	tests := []struct {
 		name    string
-		s       CheckoutService
+		s       PaymentLinkService
 		args    args
 		want    *Response
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
 			name: "Update successful",
-			s: CheckoutService{
+			s: PaymentLinkService{
 				client: c,
 			},
 			args: args{
 				id: func() string {
-					got, err := c.Checkout.Create(&CheckoutRequest{
-						Name:          "Astro checkout",
-						Description:   "Testing the checkout for my iphone 14",
-						CheckoutType:  FixedPrice,
-						RequestedInfo: []string{"name", "email", "phone"},
-						LocalAmount:   5000,
-						LocalCurrency: "NGN",
+					got, err := c.PaymentLink.Create(&PaymentLinkRequest{
+						Name:            "Astro payment link",
+						Description:     "Testing the payment link for my iphone 14",
+						PaymentLinkType: FixedPrice,
+						RequestedInfo:   []string{"name", "email", "phone"},
+						LocalAmount:     5000,
+						LocalCurrency:   "NGN",
 					})
 					if err != nil {
 						return ""
 					}
 					return got.Data.Id.String()
 				}(),
-				req: &CheckoutRequest{
-					Name:          "Check",
-					Description:   "Testing the checkout for my iphone 14",
-					CheckoutType:  FixedPrice,
-					RequestedInfo: []string{"name", "email", "phone"},
-					LocalAmount:   5000,
-					LocalCurrency: "NGN",
+				req: &PaymentLinkRequest{
+					Name:            "Check",
+					Description:     "Testing the payment link for my iphone 14",
+					PaymentLinkType: FixedPrice,
+					RequestedInfo:   []string{"name", "email", "phone"},
+					LocalAmount:     5000,
+					LocalCurrency:   "NGN",
 				},
 			},
 			want:    &Response{Status: Success},

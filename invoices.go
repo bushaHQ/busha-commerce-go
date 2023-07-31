@@ -41,8 +41,8 @@ type ListInvoiceResponse struct {
 	Data []*Invoice `json:"data"`
 }
 
-func (s *InvoiceService) List(params ListParameters) (*ListCheckoutResponse, error) {
-	var resp = new(ListCheckoutResponse)
+func (s *InvoiceService) List(params ListParameters) (*ListPaymentLinksResponse, error) {
+	var resp = new(ListPaymentLinksResponse)
 	err := s.client.call("GET", fmt.Sprintf("/invoices?sort=%s&limit=%d&page=%d",
 		params.Sort, params.Limit, params.Page), params, &resp)
 	return resp, err

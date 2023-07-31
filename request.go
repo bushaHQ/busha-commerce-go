@@ -37,13 +37,13 @@ type ChargeRequest struct {
 	CancelRedirectURL *string `json:"cancel_redirect_url,omitempty"`
 }
 
-type CheckoutRequest struct {
-	//Name is the name of the checkout
+type PaymentLinkRequest struct {
+	//Name is the name of the payment link
 	Name string `json:"name"`
-	//Description is the description of the checkout
+	//Description is the description of the payment link
 	Description string `json:"description"`
-	//CheckoutType is the type of the checkout i.e. donation or fixed_price
-	CheckoutType CheckoutType `json:"checkout_type"`
+	//PaymentLinkType is the type of the payment link i.e. donation or fixed_price
+	PaymentLinkType PaymentLinkType `json:"payment_link_type"`
 	//RequestedInfo is the requested information you'd want from the customer
 	//i.e. ["name", "email","phone_number]
 	RequestedInfo []string `json:"requested_info"`

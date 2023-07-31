@@ -37,11 +37,11 @@ type Client struct {
 	LogDebug bool
 	Log      Logger
 
-	Charge   *ChargeService
-	Checkout *CheckoutService
-	Invoice  *InvoiceService
-	Event    *EventService
-	Address  *AddressService
+	Charge      *ChargeService
+	PaymentLink *PaymentLinkService
+	Invoice     *InvoiceService
+	Event       *EventService
+	Address     *AddressService
 }
 
 type Logger interface {
@@ -88,7 +88,7 @@ func New(key string, httpClient *http.Client) (*Client, error) {
 
 	c.base.client = c
 	c.Charge = (*ChargeService)(&c.base)
-	c.Checkout = (*CheckoutService)(&c.base)
+	c.PaymentLink = (*PaymentLinkService)(&c.base)
 	c.Invoice = (*InvoiceService)(&c.base)
 	c.Event = (*EventService)(&c.base)
 	c.Address = (*AddressService)(&c.base)
